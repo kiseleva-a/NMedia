@@ -2,6 +2,7 @@ package ru.netology.nmedia.apapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -9,11 +10,15 @@ import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
 
+interface OnInteractionListener {
+    fun onLike(post: Post) {}
+    fun onEdit(post: Post) {}
+    fun onRemove(post: Post) {}
+    fun onShare(post: Post) {}
+}
 
-typealias OnLikeListener = (post: Post) -> Unit
-typealias OnShareListener = (post: Post) -> Unit
 
-class PostDiffCallback: DiffUtil.ItemCallback<Post>() {
+class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
     override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
         return oldItem.id == newItem.id
     }
@@ -24,13 +29,12 @@ class PostDiffCallback: DiffUtil.ItemCallback<Post>() {
 }
 
 class PostsAdapter(
-    private val onLikeListener: OnLikeListener,
-    private val onShareListener: OnShareListener
+    private val onInteractionListener: OnInteractionListener
 ) : ListAdapter<Post, PostViewHolder>(PostDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val view = CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PostViewHolder(view, onLikeListener, onShareListener)
+        return PostViewHolder(view, onInteractionListener)
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
@@ -41,8 +45,7 @@ class PostsAdapter(
 
 class PostViewHolder(
     private val binding: CardPostBinding,
-    private val onLikeListener: OnLikeListener,
-    private val onShareListener: OnShareListener
+    private val onInteractionListener: OnInteractionListener
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(post: Post) {
         with(binding) {
@@ -55,8 +58,28 @@ class PostViewHolder(
             like.setImageResource(
                 if (post.likedByMe) ru.netology.nmedia.R.drawable.ic_baseline_liked_24 else ru.netology.nmedia.R.drawable.ic_baseline_likes_24
             )
-            like.setOnClickListener { onLikeListener(post) }
-            share.setOnClickListener { onShareListener(post) }
+            like.setOnClickListener { onInteractionListener.onLike(post) }
+            share.setOnClickListener { onInteractionListener.onShare(post) }
+
+            menu.setOnClickListener {
+                PopupMenu(it.context, it).apply {
+                    inflate(R.menu.options_post)
+                    setOnMenuItemClickListener { menuItem ->
+                        when (menuItem.itemId) {
+                            R.id.edit -> {
+                                onInteractionListener.onEdit(post)
+                                true
+                            }
+                            R.id.remove -> {
+                                onInteractionListener.onRemove(post)
+                                true
+                            }
+                            else -> false
+                        }
+                    }
+                }.show()
+            }
+
         }
     }
 }
