@@ -57,10 +57,10 @@ class PostViewHolder(
             likeSign.isChecked = post.likedByMe
             likeSign.setOnClickListener { onInteractionListener.onLike(post) }
 
-            shareSign.text = numbersRoundings(post.likes)
+            shareSign.text = numbersRoundings(post.shared)
             shareSign.setOnClickListener { onInteractionListener.onShare(post) }
 
-            viewsSign.text = numbersRoundings(post.likes)
+            viewsSign.text = numbersRoundings(post.viewed)
 
 //            likesCount.text = numbersRoundings(post.likes)
 //            shareCount.text = numbersRoundings(post.shared)
