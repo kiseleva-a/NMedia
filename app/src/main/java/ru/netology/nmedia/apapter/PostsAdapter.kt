@@ -48,18 +48,28 @@ class PostViewHolder(
     private val onInteractionListener: OnInteractionListener
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(post: Post) {
-        with(binding) {
+        binding.apply {
             author.text = post.author
             published.text = post.published
             content.text = post.content
-            likesCount.text = numbersRoundings(post.likes)
-            shareCount.text = numbersRoundings(post.shared)
-            viewsCount.text = numbersRoundings(post.viewed)
-            like.setImageResource(
-                if (post.likedByMe) ru.netology.nmedia.R.drawable.ic_baseline_liked_24 else ru.netology.nmedia.R.drawable.ic_baseline_likes_24
-            )
-            like.setOnClickListener { onInteractionListener.onLike(post) }
-            share.setOnClickListener { onInteractionListener.onShare(post) }
+
+            likeSign.text = numbersRoundings(post.likes)
+            likeSign.isChecked = post.likedByMe
+            likeSign.setOnClickListener { onInteractionListener.onLike(post) }
+
+            shareSign.text = numbersRoundings(post.likes)
+            shareSign.setOnClickListener { onInteractionListener.onShare(post) }
+
+            viewsSign.text = numbersRoundings(post.likes)
+
+//            likesCount.text = numbersRoundings(post.likes)
+//            shareCount.text = numbersRoundings(post.shared)
+//            viewsCount.text = numbersRoundings(post.viewed)
+//            like.setImageResource(
+//                if (post.likedByMe) ru.netology.nmedia.R.drawable.ic_baseline_liked_24 else ru.netology.nmedia.R.drawable.ic_baseline_likes_24
+//            )
+
+
 
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {

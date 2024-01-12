@@ -5,6 +5,7 @@
     <string name="description_post_menu">Post menu</string>
     <string name="description_post_likes">Likes</string>
     <string name="description_post_share">Share</string>
+    <string name="description_post_views">Views</string>
     <string name="description_post_save">Save</string>
     <string name="menu_remove">Remove</string>
     <string name="post_text">Post Text</string>
