@@ -64,7 +64,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:contentDescription="@string/post_cancel_button_description"
-        android:src="@drawable/ic_baseline_close_24"
+        android:icon="@drawable/ic_baseline_close_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/content"
         app:layout_constraintBottom_toBottomOf="@+id/oldText"/>
@@ -82,7 +82,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/content"
-        app:srcCompat="@drawable/ic_baseline_save_48" />
+        app:icon="@drawable/ic_baseline_save_48" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
