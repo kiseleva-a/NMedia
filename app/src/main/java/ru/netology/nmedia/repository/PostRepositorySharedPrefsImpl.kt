@@ -117,8 +117,9 @@ class PostRepositorySharedPrefsImpl (context: Context): PostRepository {
                     shared = 0,
                     viewed = 0
                 )
-            )
+            ).reversed()
         }
+        data.value = posts
     }
 
     override fun getAll(): LiveData<List<Post>> = data
