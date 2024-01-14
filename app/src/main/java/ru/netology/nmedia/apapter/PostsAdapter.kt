@@ -1,6 +1,10 @@
 package ru.netology.nmedia.apapter
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
@@ -70,7 +74,6 @@ class PostViewHolder(
 //            )
 
 
-
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.options_post)
@@ -80,31 +83,47 @@ class PostViewHolder(
                                 onInteractionListener.onEdit(post)
                                 true
                             }
+
                             R.id.remove -> {
                                 onInteractionListener.onRemove(post)
                                 true
                             }
+
                             else -> false
                         }
                     }
                 }.show()
             }
+            if (!post.videoUrl.isNullOrBlank()) {
+                videoGroup.visibility = View.VISIBLE
 
+                val videoClickListener: (View) -> Context = { view ->
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.videoUrl))
+                    view.context.apply {
+                        val shareIntent =
+                            Intent.createChooser(intent, getString(R.string.video_play_button))
+                        startActivity(shareIntent)
+                    }
+                }
+
+                videoButton.setOnClickListener { view -> videoClickListener(view) }
+                videoPicture.setOnClickListener { view -> videoClickListener(view) }
+            }
         }
     }
-}
 
-fun numbersRoundings(count: Long): String {
-    when (count) {
-        in 0..999 -> return count.toString()
-        in 1000..1099 -> return "1K"
-        in 1100..9_999 -> return (count.toDouble() / 1000).toString().take(3) + "K"
-        in 10_000..99_999 -> return (count.toDouble() / 1000).toString().take(2) + "K"
-        in 100_000..999_999 -> return (count.toDouble() / 1000).toString().take(3) + "K"
-        else -> {
-            val milNumber = (count.toDouble() / 1_000_000).toString()
-            val strings = milNumber.split(".")
-            return strings[0] + "." + strings[1].take(1) + "M"
+    fun numbersRoundings(count: Long): String {
+        when (count) {
+            in 0..999 -> return count.toString()
+            in 1000..1099 -> return "1K"
+            in 1100..9_999 -> return (count.toDouble() / 1000).toString().take(3) + "K"
+            in 10_000..99_999 -> return (count.toDouble() / 1000).toString().take(2) + "K"
+            in 100_000..999_999 -> return (count.toDouble() / 1000).toString().take(3) + "K"
+            else -> {
+                val milNumber = (count.toDouble() / 1_000_000).toString()
+                val strings = milNumber.split(".")
+                return strings[0] + "." + strings[1].take(1) + "M"
+            }
         }
     }
 }

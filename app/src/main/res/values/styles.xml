@@ -40,4 +40,10 @@
         <item name="android:minHeight">48dp</item>
     </style>
 
+    <style name="Widget.AppTheme.VideoButton" parent="Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="iconTint">?attr/colorError</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:minHeight">48dp</item>
+    </style>
+
 </resources>
