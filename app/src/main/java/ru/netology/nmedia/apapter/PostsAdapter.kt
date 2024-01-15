@@ -19,6 +19,7 @@ interface OnInteractionListener {
     fun onEdit(post: Post) {}
     fun onRemove(post: Post) {}
     fun onShare(post: Post) {}
+    fun clickOnVideo(post: Post)
 }
 
 
@@ -94,20 +95,12 @@ class PostViewHolder(
                     }
                 }.show()
             }
+
             if (!post.videoUrl.isNullOrBlank()) {
                 videoGroup.visibility = View.VISIBLE
+                videoButton.setOnClickListener { onInteractionListener.clickOnVideo(post) }
+                videoPicture.setOnClickListener { onInteractionListener.clickOnVideo(post) }
 
-                val videoClickListener: (View) -> Context = { view ->
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.videoUrl))
-                    view.context.apply {
-                        val shareIntent =
-                            Intent.createChooser(intent, getString(R.string.video_play_button))
-                        startActivity(shareIntent)
-                    }
-                }
-
-                videoButton.setOnClickListener { view -> videoClickListener(view) }
-                videoPicture.setOnClickListener { view -> videoClickListener(view) }
             }
         }
     }

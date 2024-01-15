@@ -1,6 +1,8 @@
 package ru.netology.nmedia.activity
 
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -53,6 +55,12 @@ class MainActivity : AppCompatActivity() {
                     Intent.createChooser(intent, getString(R.string.chooser_share_post))
                 startActivity(shareIntent)
                 viewModel.shareById(post.id)
+            }
+
+            override fun clickOnVideo(post: Post) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.videoUrl))
+                startActivity(intent)
+
             }
         })
 
