@@ -108,7 +108,7 @@ class PostViewHolder(
                 videoButton.setOnClickListener { onInteractionListener.clickOnVideo(post) }
                 videoPicture.setOnClickListener { onInteractionListener.clickOnVideo(post) }
 
-            }
+            } else {videoGroup.visibility = View.GONE}
         }
     }
 
