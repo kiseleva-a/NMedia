@@ -20,6 +20,8 @@ interface OnInteractionListener {
     fun onRemove(post: Post) {}
     fun onShare(post: Post) {}
     fun clickOnVideo(post: Post)
+
+    fun clickOnPost(post: Post)
 }
 
 
@@ -58,6 +60,7 @@ class PostViewHolder(
             published.text = post.published
             content.text = post.content
 
+
             likeSign.text = numbersRoundings(post.likes)
             likeSign.isChecked = post.likedByMe
             likeSign.setOnClickListener { onInteractionListener.onLike(post) }
@@ -94,6 +97,10 @@ class PostViewHolder(
                         }
                     }
                 }.show()
+            }
+
+            root.setOnClickListener {
+                onInteractionListener.clickOnPost(post)
             }
 
             if (!post.videoUrl.isNullOrBlank()) {
