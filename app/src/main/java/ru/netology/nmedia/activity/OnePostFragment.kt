@@ -41,7 +41,7 @@ class OnePostFragment : Fragment() {
 
             override fun onEdit(post: Post) {
                 findNavController().navigate(
-                    R.id.action_feedFragment_to_newPostFragment,
+                    R.id.action_onePostFragment_to_newPostFragment,
                     Bundle().apply { textArg = post.content })
                 viewModel.edit(post)
             }

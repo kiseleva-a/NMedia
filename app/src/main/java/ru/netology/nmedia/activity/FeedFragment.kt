@@ -63,7 +63,7 @@ class FeedFragment : Fragment() {
             }
 
             override fun clickOnPost(post: Post) {
-                findNavController().navigate(R.id.action_feedFragment_to_newPostFragment, Bundle().apply { idArg = post.id })
+                findNavController().navigate(R.id.action_feedFragment_to_onePostFragment, Bundle().apply { idArg = post.id })
             }
         })
 
