@@ -18,4 +18,9 @@
     <string name="add_post">Добавить пост</string>
     <string name="save">Сохранить</string>
     <string name="video_play_button">Воспроизвести видео</string>
+    <string name="google_play_unavailable">Google Play недоступен</string>
+    <string name="channel_remote_name">Название канала</string>
+    <string name="channel_remote_description">Описание канала</string>
+    <string name="notification_user_liked">%1$s понравился пост %2$s</string>
+    <string name="notification_new_post">%1$s создал новый пост:</string>
 </resources>
