@@ -23,4 +23,7 @@
     <string name="channel_remote_description">Описание канала</string>
     <string name="notification_user_liked">%1$s понравился пост %2$s</string>
     <string name="notification_new_post">%1$s создал новый пост:</string>
+    <string name="error">Произошла ошибка</string>
+    <string name="retry">Повторить</string>
+    <string name="posts_empty">Постов нет</string>
 </resources>

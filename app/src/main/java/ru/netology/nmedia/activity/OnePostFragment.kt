@@ -31,7 +31,7 @@ class OnePostFragment : Fragment() {
         val viewHolder = PostViewHolder(binding.onePostFragment, object : OnInteractionListener {
 
             override fun onLike(post: Post) {
-                viewModel.likeById(post.id)
+                viewModel.likeById(post.id, post.likedByMe)
             }
 
             override fun onRemove(post: Post) {
@@ -69,12 +69,17 @@ class OnePostFragment : Fragment() {
             }
         })
 
-        viewModel.data.observe(viewLifecycleOwner) { posts ->
-            val post = posts.find { it.id == arguments?.idArg } ?: run {
-                findNavController().navigateUp()
-                return@observe
-            }
-            viewHolder.bind(post)
+//        viewModel.data.observe(viewLifecycleOwner) { posts ->
+//            val post = posts.find { it.id == arguments?.idArg } ?: run {
+//                findNavController().navigateUp()
+//                return@observe
+//            }
+//            viewHolder.bind(post)
+//        }
+
+        viewModel.postUpdated.observe(viewLifecycleOwner) {
+            findNavController().navigateUp()
+            viewModel.load()
         }
         return binding.root
     }

@@ -25,7 +25,10 @@ class NewPostFragment : Fragment() {
         val binding = FragmentNewPostBinding.inflate(layoutInflater, container, false)
         binding.edit.requestFocus()
 
-        binding.edit.setText(arguments?.textArg.orEmpty())
+//        binding.edit.setText(arguments?.textArg.orEmpty())
+
+        arguments?.textArg
+            ?.let(binding.edit::setText)
 
         binding.ok.setOnClickListener {
             if (!binding.edit.text.isEmpty()) {

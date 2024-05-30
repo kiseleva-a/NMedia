@@ -1,3 +1,5 @@
+
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -35,6 +37,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            manifestPlaceholders.usesCleartextTraffic = false
+        }
+        debug {
+            manifestPlaceholders.usesCleartextTraffic = true
         }
     }
     compileOptions {
@@ -66,4 +72,5 @@ dependencies {
     implementation("com.google.firebase:firebase-bom:33.0.0")
     implementation("com.google.firebase:firebase-messaging-ktx:24.0.0")
     implementation("com.google.android.gms:play-services-ads-base:23.1.0")
+    implementation ("com.squareup.okhttp3:okhttp:4.12.0")
 }

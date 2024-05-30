@@ -22,6 +22,9 @@
     <string name="channel_remote_description">Channel description</string>
     <string name="notification_user_liked">%1$s liked post %2$s</string>
     <string name="notification_new_post">%1$s created new post:</string>
+    <string name="error">Error!</string>
+    <string name="retry">Retry</string>
+    <string name="posts_empty">No posts</string>
 
 
 </resources>
