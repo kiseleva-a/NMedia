@@ -37,10 +37,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            manifestPlaceholders.usesCleartextTraffic = false
+            manifestPlaceholders["usesCleartextTraffic"] = false
         }
         debug {
-            manifestPlaceholders.usesCleartextTraffic = true
+            manifestPlaceholders["usesCleartextTraffic"] = true
         }
     }
     compileOptions {
