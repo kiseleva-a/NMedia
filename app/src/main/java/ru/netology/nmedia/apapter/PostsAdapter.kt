@@ -6,13 +6,16 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.repository.PostRepositoryImpl
 
 interface OnInteractionListener {
     fun onLike(post: Post) {}
@@ -109,7 +112,20 @@ class PostViewHolder(
                 videoPicture.setOnClickListener { onInteractionListener.clickOnVideo(post) }
 
             } else {videoGroup.visibility = View.GONE}
+
+            val url = "${PostRepositoryImpl.BASE_URL}/avatars/${post.authorAvatar}"
+            binding.avatar.load(url)
         }
+    }
+
+    private fun ImageView.load(url: String, timeout : Int = 10_000){
+        Glide.with(this)
+            .load(url)
+            .circleCrop()
+            .error(R.drawable.ic_baseline_error_outline_48)
+            .placeholder(R.drawable.ic_baseline_downloading_48)
+            .timeout(timeout)
+            .into(this)
     }
 
     fun numbersRoundings(count: Long): String {
