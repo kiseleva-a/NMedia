@@ -13,4 +13,4 @@ data class Post(
     val viewed: Long = 0,
     var videoViews: Long = 0,
     var videoUrl: String = "",
-    )
+)

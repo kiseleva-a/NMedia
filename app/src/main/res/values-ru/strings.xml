@@ -26,4 +26,7 @@
     <string name="error">Произошла ошибка</string>
     <string name="retry">Повторить</string>
     <string name="posts_empty">Постов нет</string>
+    <string name="specific_load_error">Ошибка загрузки\nКод ошибки:%1$s.</string>
+    <string name="specific_edit_error">Код ошибки:%1$s.\nПопробуйте снова</string>
+    <string name="specific_posting_error">Код ошибки:%1$s\nПопробуйте отправить сообщение снова</string>
 </resources>

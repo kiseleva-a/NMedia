@@ -29,7 +29,7 @@
 //    """
 //    )
 //    fun likeById(id: Long)
-//
+
 //    @Query("""
 //        UPDATE PostEntity SET
 //        shared = shared +1
@@ -40,4 +40,4 @@
 //    @Query("DELETE FROM PostEntity WHERE id = :id")
 //    fun removeById(id: Long)
 //}
-//
+

@@ -113,7 +113,7 @@ class PostViewHolder(
 
             } else {videoGroup.visibility = View.GONE}
 
-            val url = "${PostRepositoryImpl.BASE_URL}/avatars/${post.authorAvatar}"
+            val url = "${BuildConfig.BASE_URL}/avatars/${post.authorAvatar}"
             binding.avatar.load(url)
         }
     }

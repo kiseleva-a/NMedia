@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.ir.backend.js.compile
 
 
 plugins {
@@ -38,9 +39,11 @@ android {
                 "proguard-rules.pro"
             )
             manifestPlaceholders["usesCleartextTraffic"] = false
+            buildConfigField ("String", "BASE_URL", "https://netomedia.ru")
         }
         debug {
             manifestPlaceholders["usesCleartextTraffic"] = true
+            buildConfigField ("String", "BASE_URL", "http://10.0.2.2:9999")
         }
     }
     compileOptions {
@@ -74,4 +77,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-ads-base:23.1.0")
     implementation ("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation ("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
 }
