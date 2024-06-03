@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.PostViewModel
 import ru.netology.nmedia.R
@@ -83,14 +84,43 @@ class OnePostFragment : Fragment() {
 //            viewModel.load()
 //        }
 
-        viewModel.postsEditError.observe(viewLifecycleOwner) {
-            Toast.makeText(
-                activity,
-                getString(R.string.specific_edit_error, it),
-                Toast.LENGTH_LONG
+//        viewModel.postsEditError.observe(viewLifecycleOwner) {
+//            Toast.makeText(
+//                activity,
+//                getString(R.string.specific_edit_error, it),
+//                Toast.LENGTH_LONG
+//            )
+//                .show()
+//        }
+
+        viewModel.postsRemoveError.observe(viewLifecycleOwner) {
+            val id = it.second
+            Snackbar.make(
+                binding.root,
+                getString(R.string.specific_edit_error, it.first),
+                Snackbar.LENGTH_LONG
             )
+                .setAction("Retry"){
+                    viewModel.removeById(id)
+                }
                 .show()
         }
+
+        viewModel.postsLikeError.observe(viewLifecycleOwner) {
+            val id = it.second.first
+            val willLike = it.second.second
+            Snackbar.make(
+                binding.root,
+                getString(R.string.specific_edit_error, it.first),
+                Snackbar.LENGTH_LONG
+            )
+                .setAction("Retry"){
+                    viewModel.likeById(id,willLike)
+                }
+                .show()
+        }
+
+
         return binding.root
     }
     companion object {

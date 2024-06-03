@@ -10,3 +10,10 @@ data class FeedModel(
     val empty : Boolean = false,
     val refreshing: Boolean = false,
 )
+
+sealed interface FeedModelState {
+    object Idle : FeedModelState
+    object Error : FeedModelState
+    object Refreshing : FeedModelState
+    object Loading : FeedModelState
+}

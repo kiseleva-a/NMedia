@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.PostViewModel
 import ru.netology.nmedia.R
@@ -19,6 +20,7 @@ import ru.netology.nmedia.activity.OnePostFragment.Companion.idArg
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.apapter.OnInteractionListener
 import ru.netology.nmedia.apapter.PostsAdapter
+import ru.netology.nmedia.model.FeedModelState
 
 
 class FeedFragment : Fragment() {
@@ -84,27 +86,61 @@ class FeedFragment : Fragment() {
 
 
     private fun subscribe() {
-        viewModel.data.observe(viewLifecycleOwner) { state  ->
+        viewModel.data.observe(viewLifecycleOwner) { state ->
             adapter.submitList(state.posts)
-            binding.add.isVisible = !state.loading && !state.error
-            binding.errorGroup.isVisible = state.error
-            if (state.error) {
-                binding.errorTitle.text = getString(R.string.specific_load_error, state.errorText)
-            }
-            binding.loading.isVisible = state.loading
             binding.empty.isVisible = state.empty
         }
 
-        viewModel.postsEditError.observe(viewLifecycleOwner) {
-            Toast.makeText(
-                activity,
-                getString(R.string.specific_edit_error, it),
-                Toast.LENGTH_LONG
+        viewModel.dataState.observe(viewLifecycleOwner) { state ->
+            //binding.errorGroup.isVisible = state.error
+            binding.add.isVisible = state is FeedModelState.Idle
+            binding.loading.isVisible = state is FeedModelState.Loading
+            if (state is FeedModelState.Error) {
+                Snackbar.make(binding.root, getString(R.string.specific_load_error, viewModel.data.value?.errorText), Snackbar.LENGTH_LONG)
+                    .setAction(R.string.retry) {
+                        viewModel.load()
+                    }
+                    .show()
+            }
+        }
+
+//        viewModel.postsEditError.observe(viewLifecycleOwner) {
+//            Toast.makeText(
+//                activity,
+//                getString(R.string.specific_edit_error, it),
+//                Toast.LENGTH_LONG
+//            )
+//                .show()
+//        }
+
+        viewModel.postsRemoveError.observe(viewLifecycleOwner) {
+            val id = it.second
+            Snackbar.make(
+                binding.root,
+                getString(R.string.specific_edit_error, it.first),
+                Snackbar.LENGTH_LONG
             )
+                .setAction("Retry"){
+                    viewModel.removeById(id)
+                }
                 .show()
         }
 
-        binding.retry.setOnClickListener{
+        viewModel.postsLikeError.observe(viewLifecycleOwner) {
+            val id = it.second.first
+            val willLike = it.second.second
+            Snackbar.make(
+                binding.root,
+                getString(R.string.specific_edit_error, it.first),
+                Snackbar.LENGTH_LONG
+            )
+                .setAction("Retry"){
+                    viewModel.likeById(id,willLike)
+                }
+                .show()
+        }
+
+        binding.retry.setOnClickListener {
             viewModel.load()
         }
 
