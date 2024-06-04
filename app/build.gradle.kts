@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.kapt")
     id ("com.google.gms.google-services")
+
 }
 
 android {
@@ -80,5 +81,6 @@ dependencies {
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
     implementation ("androidx.room:room-ktx:2.6.1")
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.8.1")
+    implementation ("com.github.dhaval2404:imagepicker:2.1")
 
 }
