@@ -4,8 +4,12 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.db.AppDb
 import ru.netology.nmedia.dto.Post
@@ -25,13 +29,20 @@ private val empty = Post(
 )
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: PostRepository = PostRepositoryImpl(AppDb.getInstance(application).postDao())
+    private val repository: PostRepository =
+        PostRepositoryImpl(AppDb.getInstance(application).postDao())
     val edited = MutableLiveData(empty)
-    private val _data = MutableLiveData(FeedModel())
-    val data: LiveData<FeedModel>
-        get() = repository.data.map {
-            FeedModel(it, it.isEmpty())
-        }
+
+    val data: LiveData<FeedModel> = repository.data
+        .map(::FeedModel)
+        .asLiveData(Dispatchers.Default)
+
+    val newerCount: LiveData<Int> = data.switchMap {
+        val newerId = it.posts.firstOrNull()?.id ?: 0L
+        repository.getNewerCount(newerId)
+            .asLiveData()
+    }
+
     private val _dataState = MutableLiveData<FeedModelState>(FeedModelState.Idle)
     val dataState: LiveData<FeedModelState>
         get() = _dataState
@@ -51,11 +62,14 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         get() = _postsLikeError
 
 
-
     var draft = ""
 
     init {
         load()
+    }
+
+    fun showNewPosts() = viewModelScope.launch {
+        repository.showNewPosts()
     }
 
     fun load(isRefreshing: Boolean = false) = viewModelScope.launch {
@@ -114,3 +128,5 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 }
+
+

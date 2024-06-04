@@ -1,30 +1,40 @@
 package ru.netology.nmedia.repository
 
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
-import ru.netology.nmedia.dto.Post
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import ru.netology.nmedia.api.PostsApi
 import ru.netology.nmedia.dao.PostDao
+import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.entity.PostEntity
+import ru.netology.nmedia.entity.toDto
+import ru.netology.nmedia.entity.toEntity
 import java.io.IOException
 
 
 class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
 
 
-//    private val client = OkHttpClient.Builder()
-//        .connectTimeout(30, TimeUnit.SECONDS)
-//        .build()
-//    private val gson = Gson()
-//    private val typeToken = object : TypeToken<List<Post>>() {}
-//
-//    companion object {
-//        private val jsonType = "application/json".toMediaType()
-//    }
+    override val data = postDao.getAll().map(List<PostEntity>::toDto)
+        .flowOn(Dispatchers.Default)
 
-    override val data: LiveData<List<Post>> = postDao.getAll().map {
-        it.map(PostEntity::toDto)
+    override fun getNewerCount(id: Long): Flow<Int> = flow {
+        delay(10_000)
+        while (true) {
+            val response = PostsApi.retrofitService.getNewer(id)
+            val newPosts = response.body() ?: error("Empty response")
+            postDao.insert(newPosts.toEntity(false))
+            emit(newPosts.size)
+            delay(10_000)
+        }
+    }
+
+    override suspend fun showNewPosts() {
+        postDao.showUnseen()
     }
     override suspend fun getAll() {
         val response = PostsApi.retrofitService.getAll()

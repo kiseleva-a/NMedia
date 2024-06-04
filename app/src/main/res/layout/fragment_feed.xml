@@ -144,4 +144,15 @@
         android:visibility="gone"
         app:constraint_referenced_ids="errorTitle,retry" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/newerPostsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/newer_posts"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
