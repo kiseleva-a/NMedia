@@ -105,7 +105,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun shareById(id: Long) = viewModelScope.launch { repository.shareById(id) }
 
-    fun removeById(id: Long) {
+    fun removeById(id: Long) = viewModelScope.launch {
         try {
             repository.removeById(id)
         } catch (e: Exception) {
