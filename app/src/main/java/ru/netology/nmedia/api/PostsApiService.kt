@@ -12,6 +12,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.BuildConfig.*
 import ru.netology.nmedia.dto.Post
 
@@ -38,10 +39,10 @@ interface PostsApiService{
 
 object PostsApi {
 
-    private const val BASE_URL = "{BuildConfig.BASE_URL}/api/slow/"
+    private val BASE_URL = "${BuildConfig.BASE_URL}/api/slow/"
 
     private val logging = HttpLoggingInterceptor().apply {
-        if(DEBUG){
+        if(BuildConfig.DEBUG){
             level = HttpLoggingInterceptor.Level.BODY
         }
     }
