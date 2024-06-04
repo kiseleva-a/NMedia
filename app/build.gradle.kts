@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.ir.backend.js.compile
 
 
 plugins {
