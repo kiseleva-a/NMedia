@@ -6,21 +6,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import ru.netology.nmedia.dto.Post
-import ru.netology.nmedia.viewmodel.PostViewModel
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.activity.OnePostFragment.Companion.idArg
-import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.apapter.OnInteractionListener
 import ru.netology.nmedia.apapter.PostsAdapter
+import ru.netology.nmedia.databinding.FragmentFeedBinding
+import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.FeedModelState
+import ru.netology.nmedia.viewmodel.PostViewModel
 
 
 class FeedFragment : Fragment() {
@@ -91,6 +90,18 @@ class FeedFragment : Fragment() {
             binding.empty.isVisible = state.empty
         }
 
+
+        viewModel.newerCount.observe(viewLifecycleOwner){
+            if(it>0){
+                binding.newerPostsButton.isVisible = true
+                binding.newerPostsButton.text = getString(R.string.newer_posts,it.toString())
+            }
+            else{
+                binding.newerPostsButton.isVisible = false
+            }
+            println("Newer count $it")
+        }
+
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
             //binding.errorGroup.isVisible = state.error
             binding.add.isVisible = state is FeedModelState.Idle
@@ -142,6 +153,11 @@ class FeedFragment : Fragment() {
 
         binding.retry.setOnClickListener {
             viewModel.load()
+        }
+
+        binding.newerPostsButton.setOnClickListener{
+            binding.newerPostsButton.isVisible = false
+            viewModel.showNewPosts()
         }
 
         binding.add.setOnClickListener {

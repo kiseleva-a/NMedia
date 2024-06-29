@@ -29,4 +29,5 @@
     <string name="specific_load_error">Ошибка загрузки\nКод ошибки:%1$s.</string>
     <string name="specific_edit_error">Код ошибки:%1$s.\nПопробуйте снова</string>
     <string name="specific_posting_error">Код ошибки:%1$s\nПопробуйте отправить сообщение снова</string>
+    <string name="newer_posts">Показать новые посты: %1$s</string>
 </resources>
