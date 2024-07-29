@@ -18,6 +18,7 @@
     <string name="add_post">Добавить пост</string>
     <string name="save">Сохранить</string>
     <string name="video_play_button">Воспроизвести видео</string>
+    <string name="attached_content">Прикрепленное</string>
     <string name="google_play_unavailable">Google Play недоступен</string>
     <string name="channel_remote_name">Название канала</string>
     <string name="channel_remote_description">Описание канала</string>
@@ -30,4 +31,8 @@
     <string name="specific_edit_error">Код ошибки:%1$s.\nПопробуйте снова</string>
     <string name="specific_posting_error">Код ошибки:%1$s\nПопробуйте отправить сообщение снова</string>
     <string name="newer_posts">Показать новые посты: %1$s</string>
+    <string name="select_photo">Выбрать фото</string>
+    <string name="take_photo">Сделать фото</string>
+    <string name="picked_photo">Выбранное фото</string>
+    <string name="remove_photo">Удалить</string>
 </resources>

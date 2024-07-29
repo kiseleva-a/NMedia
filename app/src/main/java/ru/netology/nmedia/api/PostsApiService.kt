@@ -1,6 +1,7 @@
 package ru.netology.nmedia.api
 
 
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -10,9 +11,12 @@ import retrofit2.create
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 import ru.netology.nmedia.BuildConfig
+import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.Post
 
 interface PostsApiService{
@@ -37,6 +41,10 @@ interface PostsApiService{
 
     @DELETE("posts/{id}")
     suspend fun removeById(@Path("id")id: Long): Response<Unit>
+
+    @Multipart
+    @POST("media")
+    suspend fun upload(@Part file: MultipartBody.Part): Response<Media>
 }
 
 object PostsApi {
@@ -45,7 +53,7 @@ object PostsApi {
 
     private val logging = HttpLoggingInterceptor().apply {
         if(BuildConfig.DEBUG){
-            level = HttpLoggingInterceptor.Level.BODY
+            level = HttpLoggingInterceptor.Level.HEADERS
         }
     }
 

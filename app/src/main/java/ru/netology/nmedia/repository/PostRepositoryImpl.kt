@@ -7,12 +7,18 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import ru.netology.nmedia.api.PostsApi
 import ru.netology.nmedia.dao.PostDao
+import ru.netology.nmedia.dto.Attachment
+import ru.netology.nmedia.dto.AttachmentType
+import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.entity.PostEntity
 import ru.netology.nmedia.entity.toDto
 import ru.netology.nmedia.entity.toEntity
+import java.io.File
 import java.io.IOException
 
 
@@ -64,6 +70,33 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
             // throw UnknownError
         }
 
+    }
+
+    private suspend fun upload(file: File): Media {
+        try {
+            val data = MultipartBody.Part.createFormData("file", file.name, file.asRequestBody())
+
+            val response = PostsApi.retrofitService.upload(data)
+            if (!response.isSuccessful) {
+                throw  RuntimeException(
+                    response.code().toString()
+                )
+            }
+            return response.body() ?: throw RuntimeException("body is null")
+        } catch (e: Exception) {
+            throw RuntimeException(e)
+        }
+    }
+
+    override suspend fun saveWithAttachment(post: Post, file: File) {
+        try {
+            val upload = upload(file)
+            val postWithAttachment =
+                post.copy(attachment = Attachment(upload.id, "photo", AttachmentType.IMAGE))
+            save(postWithAttachment)
+        } catch (e: Exception) {
+            throw RuntimeException(e)
+        }
     }
 
     override suspend fun likeById(id: Long, willLike: Boolean) : Post {

@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
+import ru.netology.nmedia.dto.AttachmentType
 import ru.netology.nmedia.dto.Post
 
 interface OnInteractionListener {
@@ -22,6 +23,8 @@ interface OnInteractionListener {
     fun clickOnVideo(post: Post)
 
     fun clickOnPost(post: Post)
+
+    fun clickOnPicture(url: String) {}
 }
 
 
@@ -70,12 +73,6 @@ class PostViewHolder(
 
             viewsSign.text = numbersRoundings(post.viewed)
 
-//            likesCount.text = numbersRoundings(post.likes)
-//            shareCount.text = numbersRoundings(post.shared)
-//            viewsCount.text = numbersRoundings(post.viewed)
-//            like.setImageResource(
-//                if (post.likedByMe) ru.netology.nmedia.R.drawable.ic_baseline_liked_24 else ru.netology.nmedia.R.drawable.ic_baseline_likes_24
-//            )
 
 
             menu.setOnClickListener {
@@ -103,12 +100,24 @@ class PostViewHolder(
                 onInteractionListener.clickOnPost(post)
             }
 
-            if (!post.videoUrl.isNullOrBlank()) {
-                videoGroup.visibility = View.VISIBLE
-                videoButton.setOnClickListener { onInteractionListener.clickOnVideo(post) }
-                videoPicture.setOnClickListener { onInteractionListener.clickOnVideo(post) }
+//            if (!post.videoUrl.isNullOrBlank()) {
+//                videoGroup.visibility = View.VISIBLE
+//                videoButton.setOnClickListener { onInteractionListener.clickOnVideo(post) }
+//                videoPicture.setOnClickListener { onInteractionListener.clickOnVideo(post) }
+//
+//            } else {videoGroup.visibility = View.GONE}
 
-            } else {videoGroup.visibility = View.GONE}
+            if (post.attachment != null) {
+                attachmentPicture.visibility = View.VISIBLE
+                val attachmentUrl = "${BuildConfig.BASE_URL}/media/${post.attachment.url}"
+                binding.attachmentPicture.load(attachmentUrl)
+                if (post.attachment.type == AttachmentType.IMAGE) {
+                    attachmentPicture.setOnClickListener { onInteractionListener.clickOnPicture(post.attachment.url) }
+                    videoButton.visibility = View.GONE
+                } else {
+                    attachmentPicture.setOnClickListener { onInteractionListener.clickOnVideo(post) }
+                }
+            } else attachmentPicture.visibility = View.GONE
 
             val url = "${BuildConfig.BASE_URL}/avatars/${post.authorAvatar}"
             binding.avatar.load(url)

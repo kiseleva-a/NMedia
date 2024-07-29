@@ -17,6 +17,7 @@
     <string name="add_post">Add post</string>
     <string name="save">Save</string>
     <string name="video_play_button">Play</string>
+    <string name="attached_content">Attached content</string>
     <string name="google_play_unavailable">Google Play is unavailable</string>
     <string name="channel_remote_name">Channel name</string>
     <string name="channel_remote_description">Channel description</string>
@@ -29,5 +30,9 @@
     <string name="specific_edit_error">Error code:%1$s.\nTry again</string>
     <string name="specific_posting_error">Error code:%1$s\nTry sending the message again</string>
     <string name="newer_posts">Show %1$s new posts</string>
+    <string name="select_photo">Select photo</string>
+    <string name="take_photo">Take photo</string>
+    <string name="picked_photo">Picked photo</string>
+    <string name="remove_photo">Remove</string>
 
 </resources>

@@ -1,7 +1,6 @@
 package ru.netology.nmedia.activity
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.activity.OnePostFragment.Companion.idArg
+import ru.netology.nmedia.activity.PictureFragment.Companion.urlArg
 import ru.netology.nmedia.apapter.OnInteractionListener
 import ru.netology.nmedia.apapter.PostsAdapter
 import ru.netology.nmedia.databinding.FragmentFeedBinding
@@ -56,9 +56,15 @@ class FeedFragment : Fragment() {
             viewModel.removeById(post.id)
         }
 
+        override fun clickOnPicture(url: String) {
+            findNavController().navigate(R.id.action_feedFragment_to_pictureFragment,
+                Bundle().apply
+                { urlArg = url })
+        }
+
         override fun clickOnVideo(post: Post) {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.videoUrl))
-            startActivity(intent)
+//            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.videoUrl))
+//            startActivity(intent)
         }
 
         override fun clickOnPost(post: Post) {

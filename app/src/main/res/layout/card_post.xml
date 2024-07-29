@@ -84,7 +84,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="content, videoPicture" />
+        app:constraint_referenced_ids="content, attachmentPicture" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/likeSign"
@@ -157,21 +157,21 @@
     <!--        app:layout_constraintEnd_toEndOf="parent"-->
     <!--        />-->
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/videoGroup"
-        android:layout_width="wrap_content"
+<!--    <androidx.constraintlayout.widget.Group-->
+<!--        android:id="@+id/videoGroup"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginBottom="16dp"-->
+<!--        android:visibility="gone"-->
+<!--        app:constraint_referenced_ids="videoPicture,videoButton" />-->
+
+
+    <ImageButton
+        android:id="@+id/attachmentPicture"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:visibility="gone"
-        app:constraint_referenced_ids="videoPicture,videoButton" />
-
-
-    <ImageView
-        android:id="@+id/videoPicture"
-        android:layout_width="0dp"
-        android:layout_height="256dp"
-        android:layout_marginBottom="16dp"
-        android:contentDescription="@string/video_play_button"
+        android:contentDescription="@string/attached_content"
         android:src="@drawable/ic_baseline_video_preview"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
@@ -185,11 +185,12 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/video_play_button"
+        android:visibility="gone"
         app:icon="@drawable/ic_baseline_video_play_button"
         app:iconGravity="textStart"
-        app:layout_constraintBottom_toBottomOf="@id/videoPicture"
-        app:layout_constraintEnd_toEndOf="@id/videoPicture"
-        app:layout_constraintStart_toStartOf="@id/videoPicture"
-        app:layout_constraintTop_toTopOf="@id/videoPicture" />
+        app:layout_constraintBottom_toBottomOf="@id/attachmentPicture"
+        app:layout_constraintEnd_toEndOf="@id/attachmentPicture"
+        app:layout_constraintStart_toStartOf="@id/attachmentPicture"
+        app:layout_constraintTop_toTopOf="@id/attachmentPicture" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

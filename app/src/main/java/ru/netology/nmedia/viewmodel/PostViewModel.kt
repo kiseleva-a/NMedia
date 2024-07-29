@@ -1,6 +1,7 @@
 package ru.netology.nmedia.viewmodel
 
 import android.app.Application
+import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,12 +12,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.db.AppDb
+import ru.netology.nmedia.dto.PhotoModel
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.FeedModel
 import ru.netology.nmedia.model.FeedModelState
 import ru.netology.nmedia.repository.PostRepository
 import ru.netology.nmedia.repository.PostRepositoryImpl
 import ru.netology.nmedia.utils.SingleLiveEvent
+import java.io.File
 
 
 private val empty = Post(
@@ -26,6 +29,8 @@ private val empty = Post(
     authorAvatar = "",
     published = "",
 )
+
+private val noPhoto = PhotoModel(null, null)
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: PostRepository =
@@ -46,11 +51,15 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     val dataState: LiveData<FeedModelState>
         get() = _dataState
 
+    private val _photo = MutableLiveData(noPhoto)
+    val photo: LiveData<PhotoModel>
+        get() = _photo
+
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>
         get() = _postCreated
-    private val _postCreatedError = SingleLiveEvent<String>()
-    val postCreatedError: LiveData<String>
+    private val _postCreatedError = SingleLiveEvent<Pair<String, Post>>()
+    val postCreatedError: LiveData<Pair<String, Post>>
         get() = _postCreatedError
 
     private val _postsRemoveError = SingleLiveEvent<Pair<String, Long>>()
@@ -87,11 +96,22 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun save() = viewModelScope.launch {
         edited.value?.let {
-            repository.save(it)
-            _postCreated.postValue(Unit)
-            //_postCreated.value = Unit
+            try {
+                when (_photo.value) {
+                    noPhoto -> repository.save(it)
+                    else -> _photo.value?.file?.let { file ->
+                        repository.saveWithAttachment(
+                            it,
+                            file
+                        )
+                    }
+                }
+                _postCreated.postValue(Unit)
+                empty()
+            } catch (e: Exception) {
+                _postCreatedError.postValue(e.message.toString() to it)
+            }
         }
-        empty()
     }
 
     fun edit(post: Post) {
@@ -106,6 +126,14 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             }
             edited.value = it.copy(content = text)
         }
+    }
+
+    fun changePhoto(uri: Uri?, file: File?) {
+        _photo.value = PhotoModel(uri, file)
+    }
+
+    fun deletePhoto() {
+        _photo.value = noPhoto
     }
 
     fun likeById(id: Long, likedByMe: Boolean) = viewModelScope.launch {
