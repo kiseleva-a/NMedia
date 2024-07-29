@@ -19,6 +19,10 @@
         <action
             android:id="@+id/action_feedFragment_to_pictureFragment"
             app:destination="@id/pictureFragment" />
+
+        <action
+            android:id="@+id/action_feedFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
     </fragment>
 
     <fragment
@@ -45,6 +49,12 @@
         android:name="ru.netology.nmedia.activity.PictureFragment"
         android:label="PictureFragment"
         tools:layout="@layout/fragment_picture" />
+
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="ru.netology.nmedia.activity.SignInFragment"
+        android:label="fragment_sign_in_up"
+        tools:layout="@layout/fragment_sign_in_up" />
 
 
 </navigation>

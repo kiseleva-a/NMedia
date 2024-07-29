@@ -37,5 +37,9 @@
     <string name="sing_in">Sing In</string>
     <string name="sing_up">Sing Up</string>
     <string name="log_out">Log out</string>
+    <string name="login">LOGIN</string>
+    <string name="password">PASSWORD</string>
+    <string name="login_error">"Login Error: :%1$s"</string>
+    <string name="login_wrong">"Wrong login or password"</string>
 
 </resources>

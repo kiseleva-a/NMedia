@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.activity.OnePostFragment.Companion.idArg
@@ -25,6 +24,7 @@ import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.FeedModelState
+import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 
@@ -201,8 +201,7 @@ class FeedFragment : Fragment() {
                         }
 
                         R.id.signIn -> {
-                            //TODO HW
-                            AppAuth.getInstance().setAuth(5, "x-token")
+                            findNavController().navigate(R.id.action_feedFragment_to_signInFragment)
                             true
                         }
 

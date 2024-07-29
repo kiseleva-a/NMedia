@@ -5,6 +5,7 @@ import androidx.core.content.edit
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
+data class AuthPair(val id: Long, val token: String)
 class AppAuth private constructor(context: Context) {
     companion object {
         private const val TOKEN_KEY = "TOKEN_KEY"

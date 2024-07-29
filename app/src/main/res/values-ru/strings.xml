@@ -38,4 +38,8 @@
     <string name="sing_in">Авторизироваться</string>
     <string name="sing_up">Зарегистрироваться</string>
     <string name="log_out">Выйти из системы</string>
+    <string name="login">ЛОГИН</string>
+    <string name="password">ПАРОЛЬ</string>
+    <string name="login_error">"Ошибка авторизации: :%1$s"</string>
+    <string name="login_wrong">"Неправильный логин или пароль"</string>
 </resources>

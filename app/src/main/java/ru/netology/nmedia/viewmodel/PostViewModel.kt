@@ -51,7 +51,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                     FeedModel(posts.map { it.copy(ownedByMe = it.authorId == id) }, posts.isEmpty())
                 }
         }.asLiveData(Dispatchers.Default)
-    //get() = repository.data.map(::FeedModel).asLiveData(Dispatchers.Default)
+
 
     val newerCount: LiveData<Int> = data.switchMap {
         val newerId = it.posts.firstOrNull()?.id ?: 0L
