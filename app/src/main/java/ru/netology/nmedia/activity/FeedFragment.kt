@@ -3,19 +3,25 @@ package ru.netology.nmedia.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.activity.OnePostFragment.Companion.idArg
 import ru.netology.nmedia.activity.PictureFragment.Companion.urlArg
 import ru.netology.nmedia.apapter.OnInteractionListener
 import ru.netology.nmedia.apapter.PostsAdapter
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.FeedModelState
@@ -97,12 +103,11 @@ class FeedFragment : Fragment() {
         }
 
 
-        viewModel.newerCount.observe(viewLifecycleOwner){
-            if(it>0){
+        viewModel.newerCount.observe(viewLifecycleOwner) {
+            if (it > 0) {
                 binding.newerPostsButton.isVisible = true
-                binding.newerPostsButton.text = getString(R.string.newer_posts,it.toString())
-            }
-            else{
+                binding.newerPostsButton.text = getString(R.string.newer_posts, it.toString())
+            } else {
                 binding.newerPostsButton.isVisible = false
             }
             println("Newer count $it")
@@ -113,7 +118,11 @@ class FeedFragment : Fragment() {
             binding.add.isVisible = state is FeedModelState.Idle
             binding.loading.isVisible = state is FeedModelState.Loading
             if (state is FeedModelState.Error) {
-                Snackbar.make(binding.root, getString(R.string.specific_load_error, viewModel.data.value?.errorText), Snackbar.LENGTH_LONG)
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.specific_load_error, viewModel.data.value?.errorText),
+                    Snackbar.LENGTH_LONG
+                )
                     .setAction(R.string.retry) {
                         viewModel.load()
                     }
@@ -137,7 +146,7 @@ class FeedFragment : Fragment() {
                 getString(R.string.specific_edit_error, it.first),
                 Snackbar.LENGTH_LONG
             )
-                .setAction("Retry"){
+                .setAction("Retry") {
                     viewModel.removeById(id)
                 }
                 .show()
@@ -151,8 +160,8 @@ class FeedFragment : Fragment() {
                 getString(R.string.specific_edit_error, it.first),
                 Snackbar.LENGTH_LONG
             )
-                .setAction("Retry"){
-                    viewModel.likeById(id,willLike)
+                .setAction("Retry") {
+                    viewModel.likeById(id, willLike)
                 }
                 .show()
         }
@@ -161,7 +170,7 @@ class FeedFragment : Fragment() {
             viewModel.load()
         }
 
-        binding.newerPostsButton.setOnClickListener{
+        binding.newerPostsButton.setOnClickListener {
             binding.newerPostsButton.isVisible = false
             viewModel.showNewPosts()
         }
@@ -169,5 +178,46 @@ class FeedFragment : Fragment() {
         binding.add.setOnClickListener {
             findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
         }
+
+        val authViewModel: AuthViewModel by viewModels()
+        var menuProvider: MenuProvider? = null
+        authViewModel.state.observe(viewLifecycleOwner) {
+            menuProvider?.let { requireActivity()::removeMenuProvider }
+
+            requireActivity().addMenuProvider(object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    menuInflater.inflate(R.menu.menu_auth, menu)
+
+                    menu.setGroupVisible(R.id.authorized, authViewModel.authorized)
+                    menu.setGroupVisible(R.id.unauthorized, !authViewModel.authorized)
+                }
+
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
+                    when (menuItem.itemId) {
+                        R.id.logOut -> {
+                            //TODO HW
+                            AppAuth.getInstance().removeAuth()
+                            true
+                        }
+
+                        R.id.signIn -> {
+                            //TODO HW
+                            AppAuth.getInstance().setAuth(5, "x-token")
+                            true
+                        }
+
+                        R.id.signUp -> {
+                            //TODO HW
+                            AppAuth.getInstance().setAuth(5, "x-token")
+                            true
+                        }
+
+                        else -> false
+                    }
+            }.apply {
+                menuProvider = this
+            }, viewLifecycleOwner)
+        }
+
     }
 }

@@ -34,5 +34,8 @@
     <string name="take_photo">Take photo</string>
     <string name="picked_photo">Picked photo</string>
     <string name="remove_photo">Remove</string>
+    <string name="sing_in">Sing In</string>
+    <string name="sing_up">Sing Up</string>
+    <string name="log_out">Log out</string>
 
 </resources>

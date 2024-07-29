@@ -16,6 +16,7 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
 import ru.netology.nmedia.BuildConfig
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.Post
 
@@ -59,6 +60,16 @@ object PostsApi {
 
     private val client = OkHttpClient.Builder()
         .addInterceptor(logging)
+        .addInterceptor { chain ->
+            val request = AppAuth.getInstance().state.value?.token?.let {
+                chain.request()
+                    .newBuilder()
+                    .addHeader("Authorization", it)
+                    .build()
+            } ?: chain.request()
+
+            chain.proceed(request)
+        }
         .build()
 
     val retrofit = Retrofit.Builder()

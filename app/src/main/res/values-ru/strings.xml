@@ -35,4 +35,7 @@
     <string name="take_photo">Сделать фото</string>
     <string name="picked_photo">Выбранное фото</string>
     <string name="remove_photo">Удалить</string>
+    <string name="sing_in">Авторизироваться</string>
+    <string name="sing_up">Зарегистрироваться</string>
+    <string name="log_out">Выйти из системы</string>
 </resources>
