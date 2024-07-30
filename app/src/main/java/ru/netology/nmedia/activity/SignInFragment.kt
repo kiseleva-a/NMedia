@@ -12,17 +12,17 @@ import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia.R
 import ru.netology.nmedia.SignInViewModel
 import ru.netology.nmedia.auth.AppAuth
-import ru.netology.nmedia.databinding.FragmentSignInUpBinding
+import ru.netology.nmedia.databinding.FragmentSignInBinding
 
 class SignInFragment : Fragment() {
-    lateinit var binding: FragmentSignInUpBinding
+    lateinit var binding: FragmentSignInBinding
     val viewModel by viewModels<SignInViewModel>(ownerProducer = ::requireParentFragment)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSignInUpBinding.inflate(inflater, container, false)
+        binding = FragmentSignInBinding.inflate(inflater, container, false)
 
         subscribe()
 
