@@ -1,7 +1,6 @@
 package ru.netology.nmedia.service
 
 import android.Manifest
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -14,11 +13,12 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
 import ru.netology.nmedia.R
-import ru.netology.nmedia.auth.AppAuth
+import ru.netology.nmedia.di.DependencyContainer
 import kotlin.random.Random
 
 
 class FCMService : FirebaseMessagingService() {
+    private val dependencyContainer = DependencyContainer.getInstance()
     private val action = "action"
     private val content = "content"
     private val channelId = "remote"
@@ -53,7 +53,7 @@ class FCMService : FirebaseMessagingService() {
     }
 
     private fun textMessageReceived(message: RemoteMessage) {
-        val userId = AppAuth.getInstance().state.value?.id.toString()
+        val userId = dependencyContainer.appAuth.state.value?.id.toString()
 
         val messageData = gson.fromJson(
             message.data[content],
@@ -63,14 +63,14 @@ class FCMService : FirebaseMessagingService() {
         when (messageData.recipientId) {
             null,
             userId -> handleTextNotification(messageData.content)
-            else -> AppAuth.getInstance().sendPushToken()
+            else -> dependencyContainer.appAuth.sendPushToken()
         }
     }
 
 
 
     override fun onNewToken(token: String) {
-        AppAuth.getInstance().sendPushToken(token)
+        dependencyContainer.appAuth.sendPushToken(token)
     }
 
     private fun handleTextNotification(content: String?) {

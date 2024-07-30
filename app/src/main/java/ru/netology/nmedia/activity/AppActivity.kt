@@ -20,12 +20,24 @@ import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.ActivityAppBinding
+import ru.netology.nmedia.di.DependencyContainer
+import ru.netology.nmedia.viemodel.ViewModelFactory
 import ru.netology.nmedia.viewmodel.AuthViewModel
 
 
 class AppActivity : AppCompatActivity() {
 
-    private val authViewModel: AuthViewModel by viewModels()
+//    private val authViewModel: AuthViewModel by viewModels()
+private val dependencyContainer = DependencyContainer.getInstance()
+    private val authViewModel: AuthViewModel by viewModels(
+        factoryProducer = {
+            ViewModelFactory(
+                dependencyContainer.repository,
+                dependencyContainer.appAuth,
+                dependencyContainer.postApiService
+            )
+        }
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityAppBinding.inflate(layoutInflater)

@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import ru.netology.nmedia.api.PostsApi
+import ru.netology.nmedia.api.PostsApiService
 import ru.netology.nmedia.dao.PostDao
 import ru.netology.nmedia.dto.Attachment
 import ru.netology.nmedia.dto.AttachmentType
@@ -22,7 +22,7 @@ import java.io.File
 import java.io.IOException
 
 
-class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
+class PostRepositoryImpl(private val postDao: PostDao, private val postApiService: PostsApiService) : PostRepository {
 
 
     override val data = postDao.getAll().map(List<PostEntity>::toDto)
@@ -31,7 +31,7 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
     override fun getNewerCount(id: Long): Flow<Int> = flow {
         delay(10_000)
         while (true) {
-            val response = PostsApi.retrofitService.getNewer(id)
+            val response = postApiService.getNewer(id)
             val newPosts = response.body() ?: error("Empty response")
             postDao.insert(newPosts.toEntity(false))
             emit(newPosts.size)
@@ -43,7 +43,7 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
         postDao.showUnseen()
     }
     override suspend fun getAll() {
-        val response = PostsApi.retrofitService.getAll()
+        val response = postApiService.getAll()
         if (!response.isSuccessful) {
             throw RuntimeException(response.code().toString())
         }
@@ -55,7 +55,7 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
 
     override suspend fun save(post: Post) {
         try {
-            val response = PostsApi.retrofitService.save(post)
+            val response = postApiService.save(post)
             if (!response.isSuccessful) {
                 throw  RuntimeException(
                     response.code().toString()
@@ -76,7 +76,7 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
         try {
             val data = MultipartBody.Part.createFormData("file", file.name, file.asRequestBody())
 
-            val response = PostsApi.retrofitService.upload(data)
+            val response = postApiService.upload(data)
             if (!response.isSuccessful) {
                 throw  RuntimeException(
                     response.code().toString()
@@ -103,9 +103,9 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
         postDao.likeById(id)
         try {
             val response = if (willLike)
-                PostsApi.retrofitService.likeById(id)
+                postApiService.likeById(id)
             else
-                PostsApi.retrofitService.unlikeById(id)
+                postApiService.unlikeById(id)
             if (!response.isSuccessful) {
                 postDao.likeById(id)
                 throw RuntimeException(response.code().toString())
@@ -125,7 +125,7 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
         val removed = postDao.getById(id)
         postDao.removeById(id)
         try {
-            val response = PostsApi.retrofitService.removeById(id)
+            val response = postApiService.removeById(id)
             if (!response.isSuccessful) {
                 postDao.insert(removed)
                 throw RuntimeException(response.code().toString())

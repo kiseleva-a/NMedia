@@ -1,15 +1,16 @@
 package ru.netology.nmedia.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.netology.nmedia.api.PostsApi
+import ru.netology.nmedia.api.PostsApiService
 import ru.netology.nmedia.auth.AuthPair
 import ru.netology.nmedia.utils.SingleLiveEvent
 
-class SignUpViewModel(application: Application) : AndroidViewModel(application) {
+class SignUpViewModel(
+    private val postApiService: PostsApiService
+) : ViewModel() {
     private val _signUpError = SingleLiveEvent<String>()
     val signUpError: LiveData<String>
         get() = _signUpError
@@ -20,7 +21,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
 
     fun signUp(login: String, password: String, username: String)  = viewModelScope.launch {
         try {
-            val response = PostsApi.retrofitService.registerUser(login, password,username)
+            val response = postApiService.registerUser(login, password,username)
             if (!response.isSuccessful) {
                 _signUpError.postValue(response.code().toString())
             }
