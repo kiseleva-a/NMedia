@@ -18,11 +18,10 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.messaging.FirebaseMessaging
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
-import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.ActivityAppBinding
 import ru.netology.nmedia.di.DependencyContainer
-import ru.netology.nmedia.viewmodel.ViewModelFactory
 import ru.netology.nmedia.viewmodel.AuthViewModel
+import ru.netology.nmedia.viewmodel.ViewModelFactory
 
 
 class AppActivity : AppCompatActivity() {
@@ -91,7 +90,7 @@ private val dependencyContainer = DependencyContainer.getInstance()
                 if (findNavController(R.id.nav_host_fragment).currentDestination?.id == R.id.newPostFragment) {
                     false
                 } else {
-                    AppAuth.getInstance().removeAuth()
+                    dependencyContainer.appAuth.removeAuth()
                     true
                 }
             }
