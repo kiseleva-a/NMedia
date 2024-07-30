@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/purple_200"
+    android:background="@color/common_google_signin_btn_text_dark"
     tools:context=".activity.SignUpFragment">
 
     <LinearLayout
@@ -19,9 +19,9 @@
 
         <EditText
             android:id="@+id/usernameInput"
-            android:layout_width="@dimen/text_input"
-            android:layout_height="@dimen/descriptor_size"
-            android:layout_margin="@dimen/marginDefault"
+            android:layout_width="250dp"
+            android:layout_height="32dp"
+            android:layout_margin="16dp"
             android:autofillHints="name"
             android:background="@color/white"
             android:inputType="text" />
@@ -33,9 +33,9 @@
 
         <EditText
             android:id="@+id/loginInput"
-            android:layout_width="@dimen/text_input"
-            android:layout_height="@dimen/descriptor_size"
-            android:layout_margin="@dimen/marginDefault"
+            android:layout_width="250dp"
+            android:layout_height="32dp"
+            android:layout_margin="16dp"
             android:autofillHints="username"
             android:background="@color/white"
             android:inputType="text" />
@@ -47,9 +47,9 @@
 
         <EditText
             android:id="@+id/passwordInput"
-            android:layout_width="@dimen/text_input"
-            android:layout_height="@dimen/descriptor_size"
-            android:layout_margin="@dimen/marginDefault"
+            android:layout_width="250dp"
+            android:layout_height="32dp"
+            android:layout_margin="16dp"
             android:autofillHints="password"
             android:background="@color/white"
             android:inputType="textPassword" />
@@ -61,9 +61,9 @@
 
         <EditText
             android:id="@+id/repeatPasswordInput"
-            android:layout_width="@dimen/text_input"
-            android:layout_height="@dimen/descriptor_size"
-            android:layout_margin="@dimen/marginDefault"
+            android:layout_width="250dp"
+            android:layout_height="32dp"
+            android:layout_margin="16dp"
             android:autofillHints="password"
             android:background="@color/white"
             android:inputType="textPassword" />
@@ -72,7 +72,7 @@
             android:id="@+id/signUpButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/marginDefault"
+            android:layout_margin="16dp"
             android:text="@string/sing_up" />
 
     </LinearLayout>
