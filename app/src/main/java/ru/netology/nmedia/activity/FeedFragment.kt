@@ -1,5 +1,6 @@
 package ru.netology.nmedia.activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,9 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.activity.OnePostFragment.Companion.idArg
@@ -21,11 +23,22 @@ import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.FeedModelState
 import ru.netology.nmedia.viewmodel.PostViewModel
 
-
+@AndroidEntryPoint
 class FeedFragment : Fragment() {
+//    private val dependencyContainer= DependencyContainer.getInstance()
+    private val viewModel: PostViewModel by activityViewModels()
 
     lateinit var binding: FragmentFeedBinding
-    val viewModel by viewModels<PostViewModel>(ownerProducer = ::requireParentFragment)
+//    val viewModel by viewModels<PostViewModel>(
+//        ownerProducer = ::requireParentFragment,
+//        factoryProducer = {
+//            ViewModelFactory(
+//                dependencyContainer.repository,
+//                dependencyContainer.appAuth,
+//                dependencyContainer.postApiService
+//            )
+//        }
+//    )
 
     private val interactionListener = object : OnInteractionListener {
 
@@ -37,7 +50,13 @@ class FeedFragment : Fragment() {
         }
 
         override fun onLike(post: Post) {
-            viewModel.likeById(post.id, post.likedByMe)
+            val token = context?.getSharedPreferences("auth", Context.MODE_PRIVATE)
+                ?.getString("TOKEN_KEY", null)
+            if (token == null) {
+                binding.signInTab.isVisible = true
+            } else {
+                viewModel.likeById(post.id, post.likedByMe)
+            }
         }
 
         override fun onShare(post: Post) {
@@ -97,12 +116,11 @@ class FeedFragment : Fragment() {
         }
 
 
-        viewModel.newerCount.observe(viewLifecycleOwner){
-            if(it>0){
+        viewModel.newerCount.observe(viewLifecycleOwner) {
+            if (it > 0) {
                 binding.newerPostsButton.isVisible = true
-                binding.newerPostsButton.text = getString(R.string.newer_posts,it.toString())
-            }
-            else{
+                binding.newerPostsButton.text = getString(R.string.newer_posts, it.toString())
+            } else {
                 binding.newerPostsButton.isVisible = false
             }
             println("Newer count $it")
@@ -113,7 +131,11 @@ class FeedFragment : Fragment() {
             binding.add.isVisible = state is FeedModelState.Idle
             binding.loading.isVisible = state is FeedModelState.Loading
             if (state is FeedModelState.Error) {
-                Snackbar.make(binding.root, getString(R.string.specific_load_error, viewModel.data.value?.errorText), Snackbar.LENGTH_LONG)
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.specific_load_error, viewModel.data.value?.errorText),
+                    Snackbar.LENGTH_LONG
+                )
                     .setAction(R.string.retry) {
                         viewModel.load()
                     }
@@ -137,7 +159,7 @@ class FeedFragment : Fragment() {
                 getString(R.string.specific_edit_error, it.first),
                 Snackbar.LENGTH_LONG
             )
-                .setAction("Retry"){
+                .setAction("Retry") {
                     viewModel.removeById(id)
                 }
                 .show()
@@ -151,8 +173,8 @@ class FeedFragment : Fragment() {
                 getString(R.string.specific_edit_error, it.first),
                 Snackbar.LENGTH_LONG
             )
-                .setAction("Retry"){
-                    viewModel.likeById(id,willLike)
+                .setAction("Retry") {
+                    viewModel.likeById(id, willLike)
                 }
                 .show()
         }
@@ -161,13 +183,43 @@ class FeedFragment : Fragment() {
             viewModel.load()
         }
 
-        binding.newerPostsButton.setOnClickListener{
+        binding.newerPostsButton.setOnClickListener {
             binding.newerPostsButton.isVisible = false
             viewModel.showNewPosts()
         }
 
         binding.add.setOnClickListener {
-            findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+            val token = context?.getSharedPreferences("auth", Context.MODE_PRIVATE)
+                ?.getString("TOKEN_KEY", null)
+            if (token == null) {
+                binding.signInTab.isVisible = true
+            } else {
+                findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+            }
         }
+
+        binding.signInButton.setOnClickListener {
+            findNavController().navigate(R.id.action_feedFragment_to_signInFragment)
+        }
+
+        binding.goBackButton.setOnClickListener {
+            binding.signInTab.isVisible = false
+        }
+
+//        activity?.addMenuProvider(object : MenuProvider {
+//            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+//            }
+//
+//            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+//                return when (menuItem.itemId) {
+//                    R.id.logOut -> {
+//                        AppAuth.getInstance().removeAuth()
+//                        true
+//                    }
+//                    else -> false
+//                }
+//            }
+//        }, viewLifecycleOwner)
+
     }
 }

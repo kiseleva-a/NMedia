@@ -6,9 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.activity.PictureFragment.Companion.urlArg
@@ -19,15 +20,28 @@ import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.utils.LongArg
 import ru.netology.nmedia.viewmodel.PostViewModel
 
-
+@AndroidEntryPoint
 class OnePostFragment : Fragment() {
+//    private val dependencyContainer = DependencyContainer.getInstance()
+    private val viewModel: PostViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentOnePostBinding.inflate(inflater, container, false)
-        val viewModel by viewModels<PostViewModel> (ownerProducer = ::requireParentFragment)
+//        val viewModel by viewModels<PostViewModel>(
+//            ownerProducer = ::requireParentFragment,
+//            factoryProducer = {
+//                ViewModelFactory(
+//                    dependencyContainer.repository,
+//                    dependencyContainer.appAuth,
+//                    dependencyContainer.postApiService
+//                )
+//            }
+//        )
+
+
         val viewHolder = PostViewHolder(binding.onePostFragment, object : OnInteractionListener {
 
             override fun onLike(post: Post) {
