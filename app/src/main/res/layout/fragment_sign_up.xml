@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/purple_200"
+    tools:context=".activity.SignUpFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/username"/>
+
+        <EditText
+            android:id="@+id/usernameInput"
+            android:layout_width="@dimen/text_input"
+            android:layout_height="@dimen/descriptor_size"
+            android:layout_margin="@dimen/marginDefault"
+            android:autofillHints="name"
+            android:background="@color/white"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login" />
+
+        <EditText
+            android:id="@+id/loginInput"
+            android:layout_width="@dimen/text_input"
+            android:layout_height="@dimen/descriptor_size"
+            android:layout_margin="@dimen/marginDefault"
+            android:autofillHints="username"
+            android:background="@color/white"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/password" />
+
+        <EditText
+            android:id="@+id/passwordInput"
+            android:layout_width="@dimen/text_input"
+            android:layout_height="@dimen/descriptor_size"
+            android:layout_margin="@dimen/marginDefault"
+            android:autofillHints="password"
+            android:background="@color/white"
+            android:inputType="textPassword" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/repeat_password" />
+
+        <EditText
+            android:id="@+id/repeatPasswordInput"
+            android:layout_width="@dimen/text_input"
+            android:layout_height="@dimen/descriptor_size"
+            android:layout_margin="@dimen/marginDefault"
+            android:autofillHints="password"
+            android:background="@color/white"
+            android:inputType="textPassword" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/signUpButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/marginDefault"
+            android:text="@string/sing_up" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

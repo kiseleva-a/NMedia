@@ -44,11 +44,11 @@
         app:destination="@id/pictureFragment" />
 
 
-    <fragment
-        android:id="@+id/pictureFragment"
-        android:name="ru.netology.nmedia.activity.PictureFragment"
-        android:label="PictureFragment"
-        tools:layout="@layout/fragment_picture" />
+
+    <action
+        android:id="@+id/action_sign_up"
+        app:destination="@id/signUpFragment"
+        />
 
     <fragment
         android:id="@+id/signInFragment"
@@ -60,5 +60,16 @@
         android:id="@+id/action_sign_in"
         app:destination="@id/signInFragment"
         />
+
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="ru.netology.nmedia.activity.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" />
+    <fragment
+        android:id="@+id/pictureFragment"
+        android:name="ru.netology.nmedia.activity.PictureFragment"
+        android:label="PictureFragment"
+        tools:layout="@layout/fragment_picture" />
 
 </navigation>

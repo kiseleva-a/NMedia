@@ -43,4 +43,6 @@
     <string name="login_wrong">"Wrong login or password"</string>
     <string name="you_are_not_authorized">You are not authorized. Do you want to log in?</string>
     <string name="go_back">Go back</string>
+    <string name="username">USERNAME</string>
+    <string name="repeat_password">REPEAT PASSWORD</string>
 </resources>
