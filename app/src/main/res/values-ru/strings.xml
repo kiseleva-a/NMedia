@@ -35,4 +35,16 @@
     <string name="take_photo">Сделать фото</string>
     <string name="picked_photo">Выбранное фото</string>
     <string name="remove_photo">Удалить</string>
+    <string name="sing_in">Авторизироваться</string>
+    <string name="sing_up">Зарегистрироваться</string>
+    <string name="log_out">Выйти из системы</string>
+    <string name="login">ЛОГИН</string>
+    <string name="password">ПАРОЛЬ</string>
+    <string name="login_error">"Ошибка авторизации: :%1$s"</string>
+    <string name="login_wrong">"Неправильный логин или пароль"</string>
+    <string name="you_are_not_authorized">Вы не авторизированы? Хотите ли вы авторизоваться?</string>
+    <string name="go_back">Назад</string>
+    <string name="username">ИМЯ ПОЛЬЗОВАТЕЛЯ</string>
+    <string name="repeat_password">ПОВТОРИТЕ ПАРОЛЬ</string>
+    <string name="notification_new">Вы получили уведомление: %1$s</string>
 </resources>
