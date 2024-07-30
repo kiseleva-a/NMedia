@@ -4,7 +4,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -15,11 +18,14 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.messaging.FirebaseMessaging
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.ActivityAppBinding
-import java.util.jar.Manifest
+import ru.netology.nmedia.viewmodel.AuthViewModel
 
 
 class AppActivity : AppCompatActivity() {
+
+    private val authViewModel: AuthViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityAppBinding.inflate(layoutInflater)
@@ -52,6 +58,40 @@ class AppActivity : AppCompatActivity() {
         }
 
         checkGoogleApiAvailability()
+        authViewModel.state.observe(this) {
+            invalidateOptionsMenu()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_auth, menu)
+
+        menu.let {
+            it.setGroupVisible(R.id.authorized, authViewModel.authorized)
+            it.setGroupVisible(R.id.unauthorized, !authViewModel.authorized)
+        }
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.logOut -> {
+                false
+            }
+
+            R.id.signIn -> {
+                findNavController(R.id.nav_host_fragment).navigate(R.id.action_sign_in)
+                true
+            }
+
+            R.id.signUp -> {
+                //TODO HW
+                AppAuth.getInstance().setAuth(5, "x-token")
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun requestNotificationsPermission() {

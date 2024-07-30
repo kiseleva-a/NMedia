@@ -1,5 +1,6 @@
 package ru.netology.nmedia.activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,7 +25,6 @@ import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.FeedModelState
-import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 
@@ -43,7 +43,13 @@ class FeedFragment : Fragment() {
         }
 
         override fun onLike(post: Post) {
-            viewModel.likeById(post.id, post.likedByMe)
+            val token = context?.getSharedPreferences("auth", Context.MODE_PRIVATE)
+                ?.getString("TOKEN_KEY", null)
+            if (token == null) {
+                binding.signInTab.isVisible = true
+            } else {
+                viewModel.likeById(post.id, post.likedByMe)
+            }
         }
 
         override fun onShare(post: Post) {
@@ -176,47 +182,37 @@ class FeedFragment : Fragment() {
         }
 
         binding.add.setOnClickListener {
-            findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+            val token = context?.getSharedPreferences("auth", Context.MODE_PRIVATE)
+                ?.getString("TOKEN_KEY", null)
+            if (token == null) {
+                binding.signInTab.isVisible = true
+            } else {
+                findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+            }
         }
 
-        val authViewModel: AuthViewModel by viewModels()
-        var menuProvider: MenuProvider? = null
-        authViewModel.state.observe(viewLifecycleOwner) {
-            menuProvider?.let { requireActivity()::removeMenuProvider }
+        binding.signInButton.setOnClickListener {
+            findNavController().navigate(R.id.action_feedFragment_to_signInFragment)
+        }
 
-            requireActivity().addMenuProvider(object : MenuProvider {
-                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                    menuInflater.inflate(R.menu.menu_auth, menu)
+        binding.goBackButton.setOnClickListener {
+            binding.signInTab.isVisible = false
+        }
 
-                    menu.setGroupVisible(R.id.authorized, authViewModel.authorized)
-                    menu.setGroupVisible(R.id.unauthorized, !authViewModel.authorized)
-                }
+        activity?.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            }
 
-                override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
-                    when (menuItem.itemId) {
-                        R.id.logOut -> {
-                            //TODO HW
-                            AppAuth.getInstance().removeAuth()
-                            true
-                        }
-
-                        R.id.signIn -> {
-                            findNavController().navigate(R.id.action_feedFragment_to_signInFragment)
-                            true
-                        }
-
-                        R.id.signUp -> {
-                            //TODO HW
-                            AppAuth.getInstance().setAuth(5, "x-token")
-                            true
-                        }
-
-                        else -> false
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.logOut -> {
+                        AppAuth.getInstance().removeAuth()
+                        true
                     }
-            }.apply {
-                menuProvider = this
-            }, viewLifecycleOwner)
-        }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner)
 
     }
 }

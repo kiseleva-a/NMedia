@@ -42,4 +42,6 @@
     <string name="password">ПАРОЛЬ</string>
     <string name="login_error">"Ошибка авторизации: :%1$s"</string>
     <string name="login_wrong">"Неправильный логин или пароль"</string>
+    <string name="you_are_not_authorized">Вы не авторизированы? Хотите ли вы авторизоваться?</string>
+    <string name="go_back">Назад</string>
 </resources>
