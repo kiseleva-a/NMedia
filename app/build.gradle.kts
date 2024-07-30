@@ -84,7 +84,7 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.8.1")
     implementation ("com.github.dhaval2404:imagepicker:2.1")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.0")
-    implementation ("com.google.dagger:hilt-android:2.44")
-    kapt ("com.google.dagger:hilt-compiler:2.44")
+    implementation ("com.google.dagger:hilt-android:2.51.1")
+    kapt ("com.google.dagger:hilt-compiler:2.51.1")
 
 }
