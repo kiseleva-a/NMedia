@@ -10,13 +10,23 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia.R
-import ru.netology.nmedia.SignInViewModel
-import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentSignInBinding
+import ru.netology.nmedia.di.DependencyContainer
+import ru.netology.nmedia.viewmodel.SignInViewModel
+import ru.netology.nmedia.viewmodel.ViewModelFactory
 
 class SignInFragment : Fragment() {
+    private val dependencyContainer = DependencyContainer.getInstance()
     lateinit var binding: FragmentSignInBinding
-    val viewModel by viewModels<SignInViewModel>(ownerProducer = ::requireParentFragment)
+    val viewModel by viewModels<SignInViewModel>(
+        ownerProducer = ::requireParentFragment,
+        factoryProducer = {
+            ViewModelFactory(
+                dependencyContainer.repository,
+                dependencyContainer.appAuth,
+                dependencyContainer.postApiService
+            )
+        })
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,7 +57,7 @@ class SignInFragment : Fragment() {
         }
 
         viewModel.signInRight.observe(viewLifecycleOwner){
-            AppAuth.getInstance().setAuth(it.id, it.token)
+            dependencyContainer.appAuth.setAuth(it.id, it.token)
             goBack()
         }
 

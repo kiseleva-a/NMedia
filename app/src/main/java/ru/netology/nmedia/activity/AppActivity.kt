@@ -21,7 +21,7 @@ import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.ActivityAppBinding
 import ru.netology.nmedia.di.DependencyContainer
-import ru.netology.nmedia.viemodel.ViewModelFactory
+import ru.netology.nmedia.viewmodel.ViewModelFactory
 import ru.netology.nmedia.viewmodel.AuthViewModel
 
 

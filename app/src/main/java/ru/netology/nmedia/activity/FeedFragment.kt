@@ -18,15 +18,26 @@ import ru.netology.nmedia.activity.PictureFragment.Companion.urlArg
 import ru.netology.nmedia.apapter.OnInteractionListener
 import ru.netology.nmedia.apapter.PostsAdapter
 import ru.netology.nmedia.databinding.FragmentFeedBinding
+import ru.netology.nmedia.di.DependencyContainer
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.FeedModelState
 import ru.netology.nmedia.viewmodel.PostViewModel
+import ru.netology.nmedia.viewmodel.ViewModelFactory
 
 
 class FeedFragment : Fragment() {
-
+    private val dependencyContainer = DependencyContainer.getInstance()
     lateinit var binding: FragmentFeedBinding
-    val viewModel by viewModels<PostViewModel>(ownerProducer = ::requireParentFragment)
+    val viewModel by viewModels<PostViewModel>(
+        ownerProducer = ::requireParentFragment,
+        factoryProducer = {
+            ViewModelFactory(
+                dependencyContainer.repository,
+                dependencyContainer.appAuth,
+                dependencyContainer.postApiService
+            )
+        }
+    )
 
     private val interactionListener = object : OnInteractionListener {
 

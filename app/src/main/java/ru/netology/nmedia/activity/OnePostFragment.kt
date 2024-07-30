@@ -15,19 +15,31 @@ import ru.netology.nmedia.activity.PictureFragment.Companion.urlArg
 import ru.netology.nmedia.apapter.OnInteractionListener
 import ru.netology.nmedia.apapter.PostViewHolder
 import ru.netology.nmedia.databinding.FragmentOnePostBinding
+import ru.netology.nmedia.di.DependencyContainer
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.utils.LongArg
 import ru.netology.nmedia.viewmodel.PostViewModel
+import ru.netology.nmedia.viewmodel.ViewModelFactory
 
 
 class OnePostFragment : Fragment() {
+    private val dependencyContainer = DependencyContainer.getInstance()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentOnePostBinding.inflate(inflater, container, false)
-        val viewModel by viewModels<PostViewModel> (ownerProducer = ::requireParentFragment)
+        val viewModel by viewModels<PostViewModel>(
+            ownerProducer = ::requireParentFragment,
+            factoryProducer = {
+                ViewModelFactory(
+                    dependencyContainer.repository,
+                    dependencyContainer.appAuth,
+                    dependencyContainer.postApiService
+                )
+            }
+        )
         val viewHolder = PostViewHolder(binding.onePostFragment, object : OnInteractionListener {
 
             override fun onLike(post: Post) {
