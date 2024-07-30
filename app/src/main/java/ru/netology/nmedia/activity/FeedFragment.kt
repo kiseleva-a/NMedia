@@ -4,12 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -21,7 +17,6 @@ import ru.netology.nmedia.activity.OnePostFragment.Companion.idArg
 import ru.netology.nmedia.activity.PictureFragment.Companion.urlArg
 import ru.netology.nmedia.apapter.OnInteractionListener
 import ru.netology.nmedia.apapter.PostsAdapter
-import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.FeedModelState
@@ -199,20 +194,20 @@ class FeedFragment : Fragment() {
             binding.signInTab.isVisible = false
         }
 
-        activity?.addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.logOut -> {
-                        AppAuth.getInstance().removeAuth()
-                        true
-                    }
-                    else -> false
-                }
-            }
-        }, viewLifecycleOwner)
+//        activity?.addMenuProvider(object : MenuProvider {
+//            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+//            }
+//
+//            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+//                return when (menuItem.itemId) {
+//                    R.id.logOut -> {
+//                        AppAuth.getInstance().removeAuth()
+//                        true
+//                    }
+//                    else -> false
+//                }
+//            }
+//        }, viewLifecycleOwner)
 
     }
 }

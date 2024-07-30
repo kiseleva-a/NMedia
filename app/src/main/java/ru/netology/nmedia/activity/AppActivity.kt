@@ -76,7 +76,12 @@ class AppActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.logOut -> {
-                false
+                if (findNavController(R.id.nav_host_fragment).currentDestination?.id == R.id.newPostFragment) {
+                    false
+                } else {
+                    AppAuth.getInstance().removeAuth()
+                    true
+                }
             }
 
             R.id.signIn -> {

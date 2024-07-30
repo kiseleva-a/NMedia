@@ -4,26 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/common_google_signin_btn_text_dark"
-    tools:context=".activity.SignUpFragment">
+    tools:context=".activity.SignInFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_margin="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/username">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/usernameInput"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:autofillHints="name"/>
-        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_margin="16dp"
@@ -48,31 +35,17 @@
                 android:id="@+id/passwordInput"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:autofillHints="password"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword"
+                android:autofillHints="password"/>
         </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_margin="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/repeat_password">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/repeatPasswordInput"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:autofillHints="password"
-                android:inputType="textPassword"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/signUpButton"
+            android:id="@+id/signInButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="@string/sing_up" />
+            android:text="@string/sing_in" />
 
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
