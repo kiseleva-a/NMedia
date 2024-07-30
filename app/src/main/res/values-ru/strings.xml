@@ -46,4 +46,5 @@
     <string name="go_back">Назад</string>
     <string name="username">ИМЯ ПОЛЬЗОВАТЕЛЯ</string>
     <string name="repeat_password">ПОВТОРИТЕ ПАРОЛЬ</string>
+    <string name="notification_new">Вы получили уведомление: %1$s</string>
 </resources>
