@@ -16,27 +16,32 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.messaging.FirebaseMessaging
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.ActivityAppBinding
-import ru.netology.nmedia.di.DependencyContainer
 import ru.netology.nmedia.viewmodel.AuthViewModel
-import ru.netology.nmedia.viewmodel.ViewModelFactory
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class AppActivity : AppCompatActivity() {
 
-//    private val authViewModel: AuthViewModel by viewModels()
-private val dependencyContainer = DependencyContainer.getInstance()
-    private val authViewModel: AuthViewModel by viewModels(
-        factoryProducer = {
-            ViewModelFactory(
-                dependencyContainer.repository,
-                dependencyContainer.appAuth,
-                dependencyContainer.postApiService
-            )
-        }
-    )
+    //    private val authViewModel: AuthViewModel by viewModels()
+//private val dependencyContainer = DependencyContainer.getInstance()
+//    private val authViewModel: AuthViewModel by viewModels(
+//        factoryProducer = {
+//            ViewModelFactory(
+//                dependencyContainer.repository,
+//                dependencyContainer.appAuth,
+//                dependencyContainer.postApiService
+//            )
+//        }
+//    )
+    @Inject
+    lateinit var appAuth: AppAuth
+
+    private val authViewModel: AuthViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityAppBinding.inflate(layoutInflater)
@@ -90,7 +95,7 @@ private val dependencyContainer = DependencyContainer.getInstance()
                 if (findNavController(R.id.nav_host_fragment).currentDestination?.id == R.id.newPostFragment) {
                     false
                 } else {
-                    dependencyContainer.appAuth.removeAuth()
+                    appAuth.removeAuth()
                     true
                 }
             }

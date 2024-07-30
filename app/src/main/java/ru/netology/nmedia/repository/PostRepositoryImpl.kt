@@ -20,9 +20,10 @@ import ru.netology.nmedia.entity.toDto
 import ru.netology.nmedia.entity.toEntity
 import java.io.File
 import java.io.IOException
+import javax.inject.Inject
 
 
-class PostRepositoryImpl(private val postDao: PostDao, private val postApiService: PostsApiService) : PostRepository {
+class PostRepositoryImpl @Inject constructor(private val postDao: PostDao, private val postApiService: PostsApiService) : PostRepository {
 
 
     override val data = postDao.getAll().map(List<PostEntity>::toDto)

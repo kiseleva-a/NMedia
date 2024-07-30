@@ -7,27 +7,33 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentSignInBinding
-import ru.netology.nmedia.di.DependencyContainer
 import ru.netology.nmedia.viewmodel.SignInViewModel
-import ru.netology.nmedia.viewmodel.ViewModelFactory
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SignInFragment : Fragment() {
-    private val dependencyContainer = DependencyContainer.getInstance()
-    lateinit var binding: FragmentSignInBinding
-    val viewModel by viewModels<SignInViewModel>(
-        ownerProducer = ::requireParentFragment,
-        factoryProducer = {
-            ViewModelFactory(
-                dependencyContainer.repository,
-                dependencyContainer.appAuth,
-                dependencyContainer.postApiService
-            )
-        })
+    //
+    @Inject
+    lateinit var appAuth: AppAuth
 
+    lateinit var binding: FragmentSignInBinding
+
+    //    val viewModel by viewModels<SignInViewModel>(
+//        ownerProducer = ::requireParentFragment,
+//        factoryProducer = {
+//            ViewModelFactory(
+//                dependencyContainer.repository,
+//                dependencyContainer.appAuth,
+//                dependencyContainer.postApiService
+//            )
+//        })
+    private val viewModel: SignInViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,13 +62,13 @@ class SignInFragment : Fragment() {
             }
         }
 
-        viewModel.signInRight.observe(viewLifecycleOwner){
-            dependencyContainer.appAuth.setAuth(it.id, it.token)
+        viewModel.signInRight.observe(viewLifecycleOwner) {
+            appAuth.setAuth(it.id, it.token)
             goBack()
         }
 
         viewModel.signInError.observe(viewLifecycleOwner) {
-            Toast.makeText(context, getString(R.string.login_error,it), Toast.LENGTH_LONG)
+            Toast.makeText(context, getString(R.string.login_error, it), Toast.LENGTH_LONG)
                 .show()
         }
 
