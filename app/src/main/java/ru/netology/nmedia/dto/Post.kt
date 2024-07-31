@@ -14,7 +14,9 @@ data class Post(
     val shared: Long = 0,
 //    val sharedBy: Long = 0,
     val viewed: Long = 0,
-    val attachment: Attachment? = null
+    val attachment: Attachment? = null,
+    val ownedByMe: Boolean = false,
+    val authorId: Long = 0,
 )
 
 data class Attachment(
