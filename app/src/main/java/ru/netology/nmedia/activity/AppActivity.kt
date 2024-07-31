@@ -1,8 +1,6 @@
 package ru.netology.nmedia.activity
 
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -27,17 +25,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class AppActivity : AppCompatActivity() {
 
-    //    private val authViewModel: AuthViewModel by viewModels()
-//private val dependencyContainer = DependencyContainer.getInstance()
-//    private val authViewModel: AuthViewModel by viewModels(
-//        factoryProducer = {
-//            ViewModelFactory(
-//                dependencyContainer.repository,
-//                dependencyContainer.appAuth,
-//                dependencyContainer.postApiService
-//            )
-//        }
-//    )
+
     @Inject
     lateinit var appAuth: AppAuth
     @Inject
@@ -118,19 +106,19 @@ class AppActivity : AppCompatActivity() {
         }
     }
 
-    private fun requestNotificationsPermission() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-            return
-        }
-
-        val permission = android.Manifest.permission.POST_NOTIFICATIONS
-
-        if (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED) {
-            return
-        }
-
-        requestPermissions(arrayOf(permission), 1)
-    }
+//    private fun requestNotificationsPermission() {
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+//            return
+//        }
+//
+//        val permission = android.Manifest.permission.POST_NOTIFICATIONS
+//
+//        if (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED) {
+//            return
+//        }
+//
+//        requestPermissions(arrayOf(permission), 1)
+//    }
 
     private fun checkGoogleApiAvailability() {
         with(googleApiAvailability) {

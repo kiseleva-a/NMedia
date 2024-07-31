@@ -120,7 +120,7 @@
         android:id="@+id/logOutTab"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/common_google_signin_btn_text_light"
+        android:background="@color/teal_700"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone"

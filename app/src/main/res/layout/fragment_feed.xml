@@ -5,7 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.FeedFragment">
-<!--    tools:ignore="ExtraText"-->
+
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swiper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -15,6 +21,8 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/card_post" />
+
+
 
 <!--    <androidx.constraintlayout.widget.Barrier-->
 <!--        android:id="@+id/toolsTop"-->
@@ -159,7 +167,7 @@
         android:id="@+id/signInTab"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/common_google_signin_btn_text_light"
+        android:background="@color/teal_700"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone"

@@ -22,7 +22,7 @@ import ru.netology.nmedia.viewmodel.PostViewModel
 
 @AndroidEntryPoint
 class OnePostFragment : Fragment() {
-//    private val dependencyContainer = DependencyContainer.getInstance()
+
     private val viewModel: PostViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,16 +30,8 @@ class OnePostFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentOnePostBinding.inflate(inflater, container, false)
-//        val viewModel by viewModels<PostViewModel>(
-//            ownerProducer = ::requireParentFragment,
-//            factoryProducer = {
-//                ViewModelFactory(
-//                    dependencyContainer.repository,
-//                    dependencyContainer.appAuth,
-//                    dependencyContainer.postApiService
-//                )
-//            }
-//        )
+
+
 
 
         val viewHolder = PostViewHolder(binding.onePostFragment, object : OnInteractionListener {
@@ -88,6 +80,8 @@ class OnePostFragment : Fragment() {
                 findNavController().navigateUp()
             }
         })
+
+
 
 //        viewModel.data.observe(viewLifecycleOwner) { posts ->
 //            val post = posts.find { it.id == arguments?.idArg } ?: run {
