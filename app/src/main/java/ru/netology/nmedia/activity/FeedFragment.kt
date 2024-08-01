@@ -28,7 +28,7 @@ import ru.netology.nmedia.viewmodel.PostViewModel
 
 @AndroidEntryPoint
 class FeedFragment : Fragment() {
-//    private val dependencyContainer= DependencyContainer.getInstance()
+    //    private val dependencyContainer= DependencyContainer.getInstance()
     private val viewModel: PostViewModel by activityViewModels()
     private val authViewModel: AuthViewModel by activityViewModels()
 
@@ -133,10 +133,12 @@ class FeedFragment : Fragment() {
             adapter.refresh()
         }
 
-        authViewModel.state.observe(viewLifecycleOwner){
-            var authorized : Long? = -1L
-            if (it?.id != authorized){
-                authorized = it?.id
+//        authViewModel.state.observe(viewLifecycleOwner){
+//            var authorized : Long? = -1L
+//            if (it?.id != authorized){
+//                authorized = it?.id
+        authViewModel.state.observe(viewLifecycleOwner) {
+            if (it?.id != -1L) {
                 adapter.refresh()
             }
         }
@@ -172,7 +174,6 @@ class FeedFragment : Fragment() {
 //                    .show()
 //            }
 //        }
-
 
 
         viewModel.postsRemoveError.observe(viewLifecycleOwner) {
@@ -228,7 +229,6 @@ class FeedFragment : Fragment() {
         binding.goBackButton.setOnClickListener {
             binding.signInTab.isVisible = false
         }
-
 
 
     }
