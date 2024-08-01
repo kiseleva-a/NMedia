@@ -11,7 +11,7 @@
         android:id="@+id/swiper"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -21,6 +21,8 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/card_post" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
 
