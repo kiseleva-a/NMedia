@@ -92,7 +92,7 @@ class PostViewModel @Inject constructor (private val repository: PostRepository,
     fun load(isRefreshing: Boolean = false) = viewModelScope.launch {
         _dataState.value = if (isRefreshing) FeedModelState.Refreshing else FeedModelState.Loading
         try {
-            repository.getAll()
+//            repository.getAll()
             _dataState.value = FeedModelState.Idle
         } catch (e: Exception) {
             _dataState.value = FeedModelState.Error
