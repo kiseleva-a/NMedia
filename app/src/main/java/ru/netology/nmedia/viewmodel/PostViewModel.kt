@@ -1,25 +1,27 @@
 package ru.netology.nmedia.viewmodel
 
-import android.app.Application
 import android.net.Uri
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.map
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import ru.netology.nmedia.db.AppDb
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.dto.PhotoModel
 import ru.netology.nmedia.dto.Post
-import ru.netology.nmedia.model.FeedModel
 import ru.netology.nmedia.model.FeedModelState
 import ru.netology.nmedia.repository.PostRepository
-import ru.netology.nmedia.repository.PostRepositoryImpl
 import ru.netology.nmedia.utils.SingleLiveEvent
 import java.io.File
+import javax.inject.Inject
 
 
 private val empty = Post(
@@ -31,21 +33,28 @@ private val empty = Post(
 )
 
 private val noPhoto = PhotoModel(null, null)
-
-class PostViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: PostRepository =
-        PostRepositoryImpl(AppDb.getInstance(application).postDao())
+@HiltViewModel
+class PostViewModel @Inject constructor (private val repository: PostRepository, appAuth: AppAuth) : ViewModel() {
     val edited = MutableLiveData(empty)
 
-    val data: LiveData<FeedModel> = repository.data
-        .map(::FeedModel)
-        .asLiveData(Dispatchers.Default)
+//    val data: LiveData<FeedModel> = repository.data
+//        .map(::FeedModel)
+//        .asLiveData(Dispatchers.Default)
 
-    val newerCount: LiveData<Int> = data.switchMap {
-        val newerId = it.posts.firstOrNull()?.id ?: 0L
-        repository.getNewerCount(newerId)
-            .asLiveData()
-    }
+    val data: Flow<PagingData<Post>> = appAuth.state
+        .map { it?.id }
+        .flatMapLatest { id ->
+            repository.data
+                .map { posts -> posts.map { it.copy(ownedByMe = it.authorId == id) }
+                }
+        }.flowOn(Dispatchers.Default)
+
+
+//    val newerCount: LiveData<Int> = data.switchMap {
+//        val newerId = it.posts.firstOrNull()?.id ?: 0L
+//        repository.getNewerCount(newerId)
+//            .asLiveData()
+//    }
 
     private val _dataState = MutableLiveData<FeedModelState>(FeedModelState.Idle)
     val dataState: LiveData<FeedModelState>
@@ -83,7 +92,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     fun load(isRefreshing: Boolean = false) = viewModelScope.launch {
         _dataState.value = if (isRefreshing) FeedModelState.Refreshing else FeedModelState.Loading
         try {
-            repository.getAll()
+//            repository.getAll()
             _dataState.value = FeedModelState.Idle
         } catch (e: Exception) {
             _dataState.value = FeedModelState.Error
