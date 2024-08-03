@@ -1,19 +1,24 @@
-package ru.netology.nmedia.apapter
+package ru.netology.nmedia.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
+import androidx.core.view.isVisible
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.R
+import ru.netology.nmedia.databinding.CardAdBinding
 import ru.netology.nmedia.databinding.CardPostBinding
+import ru.netology.nmedia.dto.Ad
 import ru.netology.nmedia.dto.AttachmentType
+import ru.netology.nmedia.dto.FeedItem
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.view.load
 
 interface OnInteractionListener {
     fun onLike(post: Post) {}
@@ -28,31 +33,65 @@ interface OnInteractionListener {
 }
 
 
-class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
-    override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
+class PostDiffCallback : DiffUtil.ItemCallback<FeedItem>() {
+    override fun areItemsTheSame(oldItem: FeedItem, newItem: FeedItem): Boolean {
         return oldItem.id == newItem.id
     }
-
-    override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
+    override fun areContentsTheSame(oldItem: FeedItem, newItem: FeedItem): Boolean {
         return oldItem == newItem
     }
 }
 
+//class PostsAdapter(
+//    private val onInteractionListener: OnInteractionListener
+//) : PagingDataAdapter<Post, PostViewHolder>(PostDiffCallback()) {
+//
+//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
+//        val view = CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+//        return PostViewHolder(view, onInteractionListener)
+//    }
+//
+//    override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
+//        val post = getItem(position) ?: return
+//        holder.bind(post)
+//    }
+//}
+
 class PostsAdapter(
     private val onInteractionListener: OnInteractionListener
-) : ListAdapter<Post, PostViewHolder>(PostDiffCallback()) {
+) :
+    PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(PostDiffCallback()) {
+    override fun getItemViewType(position: Int): Int =
+        when (getItem(position)) {
+            is Ad -> R.layout.card_ad
+            is Post -> R.layout.card_post
+            else -> error("Unknown view type ")
+        }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
-        val view = CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PostViewHolder(view, onInteractionListener)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        when (viewType) {
+            R.layout.card_post -> {
+                val binding =
+                    CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                return PostViewHolder(binding, onInteractionListener)
+            }
+            R.layout.card_ad -> {
+                val binding =
+                    CardAdBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                return AdViewHolder(binding)
+            }
+            else -> error("Unknown view type: $viewType")
+        }
     }
 
-    override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        val post = getItem(position)
-        holder.bind(post)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (val item = getItem(position)) {
+            is Ad -> (holder as? AdViewHolder)?.bind(item)
+            is Post -> (holder as? PostViewHolder)?.bind(item)
+            else -> error("Unknown view type ")
+        }
     }
 }
-
 class PostViewHolder(
     private val binding: CardPostBinding,
     private val onInteractionListener: OnInteractionListener
@@ -74,7 +113,7 @@ class PostViewHolder(
             viewsSign.text = numbersRoundings(post.viewed)
 
 
-
+            menu.isVisible = post.ownedByMe
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.options_post)
@@ -147,5 +186,14 @@ class PostViewHolder(
                 return strings[0] + "." + strings[1].take(1) + "M"
             }
         }
+    }
+}
+
+class AdViewHolder(
+    private val binding : CardAdBinding
+) :RecyclerView.ViewHolder(binding.root) {
+
+    fun bind(ad: Ad){
+        binding.image.load("${BuildConfig.BASE_URL}/media/${ad.image}")
     }
 }
