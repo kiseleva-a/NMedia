@@ -6,15 +6,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.auth.AppAuth
+import ru.netology.nmedia.dto.FeedItem
 import ru.netology.nmedia.dto.PhotoModel
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.FeedModelState
@@ -33,19 +36,28 @@ private val empty = Post(
 )
 
 private val noPhoto = PhotoModel(null, null)
+
 @HiltViewModel
-class PostViewModel @Inject constructor (private val repository: PostRepository, appAuth: AppAuth) : ViewModel() {
+class PostViewModel @Inject constructor(private val repository: PostRepository, appAuth: AppAuth) :
+    ViewModel() {
     val edited = MutableLiveData(empty)
 
-//    val data: LiveData<FeedModel> = repository.data
+    //    val data: LiveData<FeedModel> = repository.data
 //        .map(::FeedModel)
 //        .asLiveData(Dispatchers.Default)
-
-    val data: Flow<PagingData<Post>> = appAuth.state
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val data: Flow<PagingData<FeedItem>> = appAuth.state
         .map { it?.id }
         .flatMapLatest { id ->
-            repository.data
-                .map { posts -> posts.map { it.copy(ownedByMe = it.authorId == id) }
+            repository.data.cachedIn(viewModelScope)
+                .map { posts ->
+                    posts.map { post ->
+                        if (post is Post) {
+                            post.copy(ownedByMe = post.authorId == id)
+                        } else {
+                            post
+                        }
+                    }
                 }
         }.flowOn(Dispatchers.Default)
 

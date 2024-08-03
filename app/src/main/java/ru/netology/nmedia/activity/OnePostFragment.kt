@@ -13,8 +13,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.activity.PictureFragment.Companion.urlArg
-import ru.netology.nmedia.apapter.OnInteractionListener
-import ru.netology.nmedia.apapter.PostViewHolder
+import ru.netology.nmedia.adapter.OnInteractionListener
+import ru.netology.nmedia.adapter.PostViewHolder
 import ru.netology.nmedia.databinding.FragmentOnePostBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.utils.LongArg

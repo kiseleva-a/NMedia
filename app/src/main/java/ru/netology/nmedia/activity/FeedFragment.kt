@@ -19,8 +19,9 @@ import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.activity.OnePostFragment.Companion.idArg
 import ru.netology.nmedia.activity.PictureFragment.Companion.urlArg
-import ru.netology.nmedia.apapter.OnInteractionListener
-import ru.netology.nmedia.apapter.PostsAdapter
+import ru.netology.nmedia.adapter.OnInteractionListener
+import ru.netology.nmedia.adapter.PostLoadingStateAdapter
+import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.AuthViewModel
@@ -106,7 +107,11 @@ class FeedFragment : Fragment() {
     ): View {
         binding = FragmentFeedBinding.inflate(inflater, container, false)
 
-        binding.list.adapter = adapter
+//        binding.list.adapter = adapter
+        binding.list.adapter = adapter.withLoadStateHeaderAndFooter(
+            header = PostLoadingStateAdapter { adapter.retry() },
+            footer = PostLoadingStateAdapter { adapter.retry() },
+        )
         subscribe()
 
         return binding.root
@@ -124,8 +129,8 @@ class FeedFragment : Fragment() {
             adapter.loadStateFlow.collectLatest {
                 binding.swiper.isRefreshing =
                     it.refresh is LoadState.Loading
-                            || it.append is LoadState.Loading
-                            || it.prepend is LoadState.Loading
+//                            || it.append is LoadState.Loading
+//                            || it.prepend is LoadState.Loading
             }
         }
 
